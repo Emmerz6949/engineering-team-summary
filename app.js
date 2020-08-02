@@ -12,13 +12,100 @@ const render = require("./lib/htmlRenderer");
 
 const employees = [];
 
-gatherInfo();
-
 // Write code to use inquirer to gather information about the development team members,
 // and to create objects for each team member (using the correct classes as blueprints!)
+const employeeRoleQ = {
+    type: "list",
+    name: "eRole",
+    message: "What is the employee's role?",
+    choices: ["Engineer", "Intern"]
+};
+
+const moreQ = {
+    type: "confirm",
+    name: "more",
+    message: "Would you like to add another employee?"
+};
+
+const engineerQs = [
+    {
+        type: "input",
+        message: "What is the engineer's name?",
+        name: "engineerName"
+    },
+    {
+        type: "number",
+        message: "What is the engineer's ID number?",
+        name: "engineerId"
+    },
+    {
+        type: "input",
+        message: "What is the engineer's email address?",
+        name: "engineerEmail"
+    },
+    {
+        type: "input",
+        message: "What is the engineer's GitHub username?",
+        name: "hubName"
+    }
+];
+
+const internQs = [
+    {
+        type: "input",
+        message: "What is the intern's name?",
+        name: "internName"
+    },
+    {
+        type: "number",
+        message: "What is the intern's ID number?",
+        name: "internId"
+    },
+    {
+        type: "input",
+        message: "What is the intern's email address?",
+        name: "internEmail"
+    },
+    {
+        type: "input",
+        message: "What school is the intern enrolled at?",
+        name: "skool"
+    }
+];
+
+gatherInfo();
 
 async function gatherInfo() {
     try {
+        console.log(` `);
+        console.log(`Welcome to the Engineering Team Summary command-line application!`);
+        console.log(`First things first, every team needs a manager! So...`);
+        console.log(` `);
+        const managerInfo = await inquirer.prompt([
+            {
+                type: "input",
+                message: "What is the manager's name?",
+                name: "manageName"
+            },
+            {
+                type: "number",
+                message: "What is the manager's ID number?",
+                name: "manageId"
+            },
+            {
+                type: "input",
+                message: "What is the manager's email address?",
+                name: "manageEmail"
+            },
+            {
+                type: "number",
+                message: "What is the manager's office number?",
+                name: "offNum"
+            }
+        ]);
+        const {manageName, manageId, manageEmail, offNum} = managerInfo;
+        const mamsir = new Manager(manageName, manageId, manageEmail, offNum);
+        employees.push(mamsir);
         
     } catch (err) {
         console.log(err);
