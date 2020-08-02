@@ -106,7 +106,49 @@ async function gatherInfo() {
         const {manageName, manageId, manageEmail, offNum} = managerInfo;
         const mamsir = new Manager(manageName, manageId, manageEmail, offNum);
         employees.push(mamsir);
-        
+
+        console.log(` `);
+        console.log(`Great! But it's not an engineering team without at least one engineer! So...`);
+        console.log(` `);
+        const firstEngineer = await inquirer.prompt(engineerQs);
+        const {engineerName, engineerId, engineerEmail, hubName} = firstEngineer;
+        const firstE = new Engineer(engineerName, engineerId, engineerEmail, hubName);
+        employees.push(firstE);
+
+        console.log(` `);
+        const moreE = await inquirer.prompt(moreQ);
+        let {more} = moreE;
+        do {
+            console.log(` `);
+            const employeeRole = await inquirer.prompt(employeeRoleQ);
+            const {eRole} = employeeRole;
+
+            if (eRole === "Engineer") {
+                console.log(` `);
+                const addEngineer = await inquirer.prompt(engineerQs);
+                const {engineerName, engineerId, engineerEmail, hubName} = addEngineer;
+                const moreEngineer = new Engineer(engineerName, engineerId, engineerEmail, hubName);
+                employees.push(moreEngineer);
+            }
+            if (eRole === "Intern") {
+                console.log(` `);
+                const addIntern = await inquirer.prompt(internQs);
+                const {internName, internId, internEmail, skool} = addIntern;
+                const moreIntern = new Intern(internName, internId, internEmail, skool);
+                employees.push(moreIntern);
+            }
+            console.log(` `);
+            const moreE = await inquirer.prompt(moreQ);
+            more = moreE.more;
+        } 
+        while (more === true);
+
+        fs.writeFile(outputPath, render(employees), function(err){
+            if (err) {
+                return console.log(err);
+            }            
+        });
+
     } catch (err) {
         console.log(err);
     }
